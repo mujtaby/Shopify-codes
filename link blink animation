@@ -1,0 +1,8 @@
+a[href="/collections/parisa-hs-22"]{
+        color: red !important;
+        animation: blink 1s linear infinite;
+      }
+@keyframes blink{
+0%{opacity: 0;}
+100%{opacity: 1;}
+}
