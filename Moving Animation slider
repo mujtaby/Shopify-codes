@@ -1,0 +1,104 @@
+<section>
+  <div class="moving-animation">
+    <ul>
+      {% for block in section.blocks %}
+    <li><span>{{ block.settings.custom-svg }}</span>
+        {{ block.settings.custom-text }}
+        
+    </li>
+
+{% endfor %}
+    </ul>
+  </div>
+</section>
+
+<style>
+  body .moving-animation ul {
+    display: flex;
+    padding: 0 2rem;
+    margin-bottom: 0;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-direction: row;
+    width: fit-content;
+    width: -moz-fit-content;
+    animation: marqueeLeft 30s linear infinite;
+}
+
+  body .moving-animation ul li {
+    font-family: var(--f_montserrat_extra_italic);
+    font-weight: 700;
+    font-style: italic;
+    font-size: 4.5rem;
+    letter-spacing: 0em;
+    line-height: 1;
+    text-align: left;
+    text-transform: uppercase;
+    color: var(--c_white);
+    -webkit-text-stroke-color: var(--c_white);
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke-width: 0.02em;
+    margin-bottom: 0;
+    margin-right: 0.75em;
+    flex: 0 0 fit-content;
+    flex: 0 0 -moz-fit-content;
+    max-width: fit-content;
+    max-width: -moz-fit-content;
+    position: relative;
+}
+ @keyframes marqueeLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-75%); }
+}
+
+@keyframes marqueeRight {
+  0% { transform: translateX(-85%); }
+  100% { transform: translateX(0%); }
+} 
+  
+</style>
+
+
+
+
+
+
+
+
+
+{% schema %}
+  {
+    "name": "Custom Moving Animation",
+    "settings": [],
+     "blocks" : [
+      {
+      "name":"text",
+        "type":"text",
+        "settings":[
+          {
+  "type": "text",
+  "id": "custom-text",
+  "label": "Write Text here"
+},
+       {
+  "type": "text",
+  "id": "custom-svg",
+  "label": "SVG ICON"
+}        
+        ]
+}      
+    ],
+    "presets": [
+    {
+      "category": "Advanced",
+      "name": "Custom Moving Animation"
+    }
+  ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
