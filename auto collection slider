@@ -1,0 +1,175 @@
+<section><div class="collection-slider">
+  <div class="slider-container">
+{% comment %}    {% for collection in collections %} 
+      <div class="slider-item">
+        <a href="{{ collection.url }}">
+          <img src="{{ collection.featured_image | img_url }}" alt="{{ collection.title }}">
+          <h3>{{ collection.title }}</h3>
+        </a>
+      </div>
+    {% endfor %}
+    {% endcomment %} 
+
+{% for block in section.blocks %}
+  {% if block.settings.custom_collection %}
+    {% assign mycollection = collections[block.settings.custom_collection] %}
+    {% if mycollection %}
+      <div class="slider-item" itemscope itemtype="http://schema.org/Collection">
+        <a href="{{ mycollection.url }}" >
+          <img src="{{ mycollection.featured_image | img_url }}" alt="{{ mycollection.title }}">
+          <div class="content">
+            <h3 itemprop="name">{{ mycollection.title }}</h3>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+    
+
+
+  </div>
+</div>
+</section>
+
+<style>
+  .collection-slider {
+  padding: 20px;
+}
+
+.slider-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.slider-item {
+  flex: 1 1 auto;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.slider-item:last-child {
+  margin-right: 0;
+}
+
+.slider-item a {
+  display: block;
+  position: relative;
+}
+
+.slider-item img {
+  width: 100%;
+}
+
+.slider-item h3 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  margin: 0;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+  font-size: 20px;
+  text-transform: uppercase;
+}
+</style>
+
+
+
+
+
+{% schema %}
+  {
+    "name": "Collection Custom Slider",
+    "settings": [
+     
+    ],
+      "blocks" : [
+      {
+      "name":"Collection",
+        "type":"slide",
+        "settings":[
+
+            {
+              
+              "type": "collection",
+              "id": "custom_collection",
+              "label": "Collection link"
+            
+            }  
+       
+            
+        ]
+        } 
+    ],
+    
+    "presets": [
+    {
+      "category": "Advanced",
+      "name": "Collection Custom Slider"
+    }
+  ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
+
+
+
+ <script>
+  $('.slider-container').slick({
+    dots: true,
+    infinite: true,
+    speed: 300,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+     autoplay: true,
+  autoplaySpeed: 2000,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
