@@ -1,0 +1,95 @@
+{% for block in section.blocks %}
+  {% case block.type %}
+    {% when 'heading' %}
+      <div class="text">
+        {{ block.settings.tab_title }}
+      </div>
+    ...
+  {% endcase %}
+{% endfor %}
+
+
+{% for block in section.blocks %}
+  {% case block.type %}
+    {% when 'description' %}
+      <div class="text">
+        {{ block.settings.tab_title }}
+      </div>
+    ...
+  {% endcase %}
+{% endfor %}
+
+{% for block in section.blocks %}
+  {% case block.type %}
+    {% when 'image' %}
+      <div class="image_picker">
+        {{ block.settings.logo_image | image_url: width: 200 | image_tag }}
+      </div>
+    ...
+  {% endcase %}
+{% endfor %}
+
+
+{% schema %}
+{
+    "name":"Custom Tabs",
+    "settings":[
+    ],
+    "blocks":[
+        {
+          "type":"heading",  
+          "name":"Heading Block",  
+          "settings":[
+            {
+              "type":"text",
+              "id":"tab_title",
+              "label":"Tab Title",
+              "default":"Enter Tab Name"
+            }
+            
+          ]
+        },
+      {
+          "type":"description",  
+          "name":"Description Block",  
+          "settings":[
+            {
+              "type":"text",
+              "id":"tab_title",
+              "label":"Tab Title",
+              "default":"Enter Tab Name"
+            }
+            
+          ]
+        },
+      {
+          "type":"image",  
+          "name":"Image Block",  
+          "settings":[
+            {
+            "type": "image_picker",
+            "id": "logo_image",
+            "label": "Logo Image",
+            "info": "Upload a logo image."
+    }
+             
+          
+            
+          ]
+        }
+      
+    ],
+    "presets":[
+        {
+            "name":"Custom Tabs",
+            "category":"custom"
+        }
+    ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
