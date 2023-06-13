@@ -1,0 +1,7 @@
+{% if product.tags contains 'Pre Booking' %}
+                <div class="whatsapp-btn">
+                    <a class="buy-via-whatapp  button" href="https://wa.me/+923222363222?text={{shop.url | escape }}{{ product.url | within: collection}}" target="_blank">
+                      <span class="" aria-hidden="true"> <i class="ad ad-whatsapp"></i> Chat For Pre-oder</span>
+                    </a>
+                </div>
+{% endif %}
