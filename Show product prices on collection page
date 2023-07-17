@@ -1,0 +1,9 @@
+{% for product_option in product.options_with_values %}
+{% if product_option.name == 'Sizes' or product_option.name == 'sizes' or product_option.name == 'size' or product_option.name == 'Size' %}
+        <ul>
+          {% for value in product_option.values %}
+          <li>{{ value }}</li>
+          {% endfor %}
+        </ul>
+{% endif %}
+{% endfor %}
