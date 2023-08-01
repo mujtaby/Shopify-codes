@@ -1,0 +1,4 @@
+ <div class="order-notes">
+                          <label for="ordernotes">Order instructions:</label>
+                          <textarea id="ordernotes" name="properties[Order Notes]" rows="4" cols="50"></textarea>
+                        </div>
