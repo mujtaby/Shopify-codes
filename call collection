@@ -1,0 +1,21 @@
+{% assign collection = section.settings.collection %}
+            
+            {% if collection.products.size > 0 %}
+            
+              <div class="product-list">
+                <!-- Loop through the products in the collection -->
+                {% for product in collection.products limit: 2 %}
+                   {% render 'product-block', product: product, collection: collection, custom_aspect_ratio: chosen_aspect_ratio, no_swiping: true %}
+                {% endfor %}
+              </div>                
+            {% else %}
+              <p>No products available in this collection.</p>
+            {% endif %}
+
+
+{
+      "type": "collection",
+      "id": "collection",
+      "label": "Select a Collection"
+      
+    }
