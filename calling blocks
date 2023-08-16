@@ -1,0 +1,20 @@
+"blocks":[
+    {
+      "type":"product",
+      "name":"product",
+      "settings":[
+        {
+      "type":"product",
+      "id":"prdct",
+      "label":"Calling Product Here"
+          
+    }
+      ]
+    }
+  ],
+        // presets
+        "presets":[
+    {
+      "name":"Gummi Collection"
+    }
+  ]
