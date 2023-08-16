@@ -1,0 +1,14 @@
+<div class="gummi-collection-products">
+          {% for product in section.blocks %}
+            <div class="gummi-product-card">
+              <a href="{{ product.settings.prdct.url }}">
+                {% render 'img-fluid', img: product.settings.prdct.featured_image %}
+                <h3>{{ product.settings.prdct.title }}</h3>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+// image calling code
+{% if img != blank %}
+<img src="{{ img | img_url:'master'}}" class="img-responsive" width='' height='' />
+{% endif %}
