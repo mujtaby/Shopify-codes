@@ -1,0 +1,147 @@
+<div class = "pop-up-flex">
+    {% if product.tags contains 'quote' %}
+    <!-- button quote popup -->
+    <div class="product-popup">
+      <button class="quote-button" onclick="openQuoteForm()">Request a Quote</button>
+    
+        <!-- The pop-up form container -->
+        <div class="quote-popup" id="quotePopup">
+            <div class="quote-form">
+                <!-- Close button -->
+              <div class="closs-arrow">
+                <button class="quote-close" onclick="closeQuoteForm()"><p>Close</p></button>
+              </div>
+                <h2>Request a Quote</h2>
+                <form id="quoteForm" onsubmit="showThankYouMessage(); return false;">
+                 <div class="main-div">
+        <div class="inner-div">
+            <p>Name</p> 
+            <input
+                type="text"
+                id="ContactFormName"
+                name="contact[name]"
+                class="full"
+                placeholder="Name"
+            >
+        </div>
+        <div class="inner-div">
+            <p>Email</p> 
+            <input type="email" class="quote-input" placeholder="Email" required>
+        </div>
+        <div class="inner-div">
+            <p>Phone</p> 
+            <input type="tel" class="quote-input" placeholder="Phone Number" required>
+        </div>
+        <div class="inner-div">
+            <p>City</p> 
+            <input type="text" id="City" name="contact[city]" class="quote-input" placeholder="City" required>
+        </div>
+        <!-- New Quantity input field -->
+    </div>
+    <div class="inner-div">
+            <p>Quantity</p> 
+            <input type="number" id="Quantity" name="contact[quantity]" class="quote-input" placeholder="Quantity" required>
+        </div>
+      <div class="inner-div">
+                  Message
+                  <textarea id="Comment" name="contact[comment]" class="quote-input" placeholder="Comment" required></textarea>
+      </div>
+                    <button type="submit" class="quote-submit">Submit</button>
+                </form>
+                <div class="thank-you" id="thankYouMessage">Thank you for your request!</div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+<style>
+    .product-popup{
+  margin-top:4px;
+   margin-bottom:20px;
+}
+.product-popup h2{
+  text-align:center;
+}
+.quote-button {
+    background-color: #3f72e5;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 30px;
+   padding: 18px;
+    font-size: 16px;
+              font-weight: 500;
+}
+.quote-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        .quote-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #00000080;
+            width: 50%;
+            position: absolute;
+            right: 24%;
+            top: 10%;
+        }
+        .quote-form {
+    width: 100%;
+    position:unset;
+    
+}
+.closs-arrow button{
+  display:block;
+}
+.quote-close:after{
+  content: "X";
+    font-weight: 200;
+    color: #000;
+  font-size:24px;
+}
+.quote-close p{
+  font-size:0px;
+}
+.inner-div {
+  flex-basis: 50%; /* Each inner div takes up 50% width */
+  box-sizing: border-box; /* Include padding and border in width calculation */
+  padding: 10px; /* Adjust the padding as needed */
+}
+.inner-div p {
+    margin-bottom: 8px;
+}
+</style>
+
+
+
+    <script>
+        // Function to open the pop-up form
+           function openQuoteForm() {
+               document.getElementById("quotePopup").style.display = "block";
+           }
+   
+           // Function to close the pop-up form
+           function closeQuoteForm() {
+               document.getElementById("quotePopup").style.display = "none";
+           }
+   
+           // Function to show the thank you message, hide the form, and close the popup after a delay
+           function showThankYouMessage() {
+               document.getElementById("quoteForm").style.display = "none";
+               document.getElementById("thankYouMessage").style.display = "block";
+   
+               // Close the popup after 3 seconds (adjust the time as needed)
+               setTimeout(function () {
+                   document.getElementById("quotePopup").style.display = "none";
+               }, 3000); // 3000 milliseconds = 3 seconds
+           }
+   </script>
