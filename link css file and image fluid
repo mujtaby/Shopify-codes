@@ -1,0 +1,21 @@
+////link css file//
+{{ 'gummi.css' | asset_url | stylesheet_tag }}
+
+
+
+//image fluid//
+{% if img != blank %}
+<img src="{{ img | img_url:'master'}}" class="img-responsive" width='' height='' />
+{% endif %}
+
+
+
+//snippets///
+{% render 'img-fluid', img:section.settings.bg %}
+
+/// presets//////
+ "presets":[
+    {
+      "name":"Gummi Hero Section"
+    }
+  ]
