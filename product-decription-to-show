@@ -1,0 +1,1 @@
+{{ card_product.description | strip_html | truncatewords: 20 }}
