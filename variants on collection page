@@ -1,0 +1,58 @@
+{% for option in card_product.options %}
+{% if option == 'Color' %}
+{% assign index = forloop.index0 %}
+{% assign colorlist = '' %}
+{% assign color = '' %}
+{% for variant in card_product.variants %}
+{% capture color %}
+{{ variant.options[index] }}
+{% endcapture %}
+{% unless colorlist contains color %}
+  <div class="flex-container-swatch">
+{% if variant.image.src != blank %}
+<label class="image-swacth-color">
+  <div class="tooltip">
+  <input type="radio" name="{{ variant.options[index] }}" value="{{ variant.id }}" >
+  <img class="variant-image" src="{{ variant.image.src | img_url: 'thumb' }}" data-src="{{ variant.image.src | img_url: 'medium' }}" alt="{{ variant.title }}" />
+  <span class="tooltiptext">{{ variant.options[index] }}</span>
+  </div>
+</label>
+    {% else %}
+         <label class="text-swacth-color">
+            <input
+              type="radio"
+              name="{{ variant.options[index] }}"
+              value="{{ variant.id }}"
+            >
+            <p class="swatch-option">{{ variant.options[index] }}</p>
+         </label>
+    {% endif %}
+  </div>
+{% capture tempList %}
+{{colorlist | append: color | append: ' '}}
+{% endcapture %}
+{% assign colorlist = tempList %}
+{% endunless %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+
+////js
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+  const variantImages = document.querySelectorAll('.product-grid-container .variant-image');
+
+  variantImages.forEach((image) => {
+    image.addEventListener('click', () => {
+      const newSrc = image.dataset.src;
+      const newSrcset = image.dataset.srcset;
+
+      const collectionImage = image.closest('.grid__item').querySelector('.collection-image > img');
+      collectionImage.src = newSrc;
+      collectionImage.srcset = newSrcset;
+      collectionImage.setAttribute('data-src', newSrc);
+      collectionImage.removeAttribute('srcset');
+    });
+  });
+});
+</script>
