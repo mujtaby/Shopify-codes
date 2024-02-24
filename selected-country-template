@@ -1,0 +1,548 @@
+
+<!-- for theme file start here -->
+
+{% if template.name != "index" %}
+        {% section 'announcement' %}
+        {% section 'header' %}
+        <section class="main-content">
+          {{ content_for_layout }}
+        </section>
+        {% section 'footer' %}
+  {% else %}
+  <div class="index-sections">
+  {{ content_for_index }}
+</div>
+{% endif %}
+
+<!-- for theme file end here -->
+
+
+/////
+Modified liquid
+
+
+{% if template.name != "index" %}
+        <a class="skip-to-content-link button visually-hidden" href="#MainContent">
+      {{ 'accessibility.skip_to_text' | t }}
+    </a>
+
+    {%- if settings.cart_type == 'drawer' -%}
+      {%- render 'cart-drawer' -%}
+    {%- endif -%}
+
+    {% sections 'header-group' %}
+
+    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+  {% else %}
+  <div class="index-sections">
+ <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+</div>
+{% endif %}
+
+
+/////
+
+
+
+
+<section class="custom-landing-page">
+
+      {% if section.settings.use_video == false %}
+          <div class="splash-page-holder">
+             <form class="form-country" action="#" id="countrydropdown" method="post" onsubmit="return false;">
+              <div class="splash-khaadi-logo">
+                  
+                  </div>    
+                  <div class="field-holder country-select">
+                      <select class="country" id="countrycode" name="countrycode">
+                          <option value="pk">Select Your Country</option>
+                          <option value="pk">Pakistan</option>
+                          <option value="int">Rest of the World</option>
+                      </select>
+                  </div>
+                  <div><input class="btn" type="submit" value="ENTER" onclick="redirectostore()"></div>
+              </form>
+          </div>
+          {% else %}
+      <div class="he-index-video-div">
+        {% if section.settings.video_type == 'shopify_video' %}
+          {% if section.settings.desktop_shopify_video_url != blank %}
+            <video
+              class="he-mobile-hide"
+              width="100%"
+              height="100vh"
+              muted
+              autoplay
+              loop
+            >
+              <source src="{{ section.settings.desktop_shopify_video_url }}" type="video/mp4">
+            </video>
+          {% endif %}
+          {% if section.settings.mobile_shopify_video_url != blank %}
+            <video
+              class="he-desktop-hide"
+              width="100%"
+              height="100vh"
+              muted
+              autoplay
+              loop
+            >
+              <source src="{{ section.settings.mobile_shopify_video_url }}" type="video/mp4">
+            </video>
+          {% endif %}
+        {% endif %}
+
+        {% if section.settings.video_type == 'youtube_video' %}
+          <div class="he-overlay"></div>
+          <div class="video-container">
+            <div id="player"></div>
+          </div>
+        {% endif %}
+        <div class="splash-page-holder video-dropdown ">
+             <form class="form-country" action="#" id="countrydropdown" method="post" onsubmit="return false;">
+              <div class="splash-khaadi-logo">
+                  
+                  </div>    
+                  <div class="field-holder country-select">
+                      <select class="country" id="countrycode" name="countrycode">
+                          <option value="pk">Select Your Country</option>
+                          <option value="pk">Pakistan</option>
+                          <option value="int">International</option>
+                      </select>
+                  </div>
+                  <div><input class="btn" type="submit" value="ENTER" onclick="redirectostore()"></div>
+              </form>
+          </div>
+      </div>
+    {% endif %}
+
+
+
+
+        
+  
+</section>
+
+
+
+<style>
+body.template-index{
+  overflow:hidden;
+}
+.splash-page-holder {
+    background:url('{{ section.settings.bg_image.src | img_url: 'master' }}') center center no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 80px 40px;
+    font-family: Arial, Helvetica, sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .form-country {
+    max-width: 350px;
+    width: 100%;
+    display: grid;
+    grid-gap: 20px;
+  }
+  .field-holder {
+    position: relative;
+  }
+  .splash-page-holder .select-selected {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 5px 20px;
+    border: solid 1px black;
+    height: 50px !important;
+    border-radius: 10px;
+    color: #282828 !important;
+    -webkit-appearance: none;
+    width: 100%;
+    font-size: 14px;
+    line-height: 37px;
+    cursor: pointer;
+  }
+  .splash-page-holder .btn {
+    border: 0;
+    display: flex;
+    min-height: 40px;
+    font-size: 12px;
+    background: #2d2b2a;
+    max-width: 200px;
+    width: 100%;
+    margin: auto;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+    justify-content: center;
+    outline: none;
+  }
+  
+  .splash-page-holder .btn:hover {
+    background: #fff;
+    color: #2d2b2a;
+  }
+  select::-ms-expand {
+    display: none;
+  }
+  .splash-khaadi-logo {
+    text-align: center;
+  }
+  .splash-khaadi-logo  img {    
+    max-width: 220px;
+    height: auto;
+  }
+  .splash-page-holder .country-select select {
+    display: none;
+  }
+  .select-selected:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: transparent;
+    top: 23px;
+    right: 23px;
+    text-indent: -9999px;
+    transform: translateY(-50%) rotate(
+    -135deg);
+    text-decoration: none;
+    color: transparent;
+  border-top: 2px solid #3f3f3f;
+    border-left: 2px solid #3f3f3f;
+  }
+  .select-items div {
+    padding: 0 10px !important;
+    font-size: 15px;
+    cursor: pointer;
+    margin: 0 0 5px;
+    line-height: 21px;
+  }
+  .splash-page-holder .select-items {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.8) !important;
+    top: 120%;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    border-radius: 10px !important;
+    border: 1px solid #000;
+    overflow: hidden;
+    color: #000 !important;
+  }
+  .select-hide {
+    display: none;
+  }
+  
+  .select-items div:hover, .same-as-selected {
+    text-decoration: none;
+    background: #000;
+    color: #fff;
+  }
+.he-index-video-div video {
+    object-fit: cover;
+}
+
+.he-index-video-div video,
+.he-index-video-div iframe {
+    height: 100vh;
+}
+
+
+.he-index-video-div {
+    position: relative;
+}
+  .video-dropdown {
+    position: absolute;
+    top: 0;
+}
+
+  .video-dropdown{
+        display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 80px 40px;
+    font-family: Arial, Helvetica, sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+.splash-page-holder.video-dropdown {
+  background:none;
+}
+iframe#player {
+    pointer-events: none;
+}
+
+
+  
+/*  mobile responsive  */
+
+@media only screen and (max-width: 767px){
+  .splash-page-holder {
+    background:url('{{ section.settings.bg_image_mob.src | img_url: 'master' }}') center center no-repeat;
+    background-size: cover;
+    padding: 10px 50px 40px;
+  }
+  .splash-page-holder .select-selected{
+    font-size:13px;
+  }
+}
+
+  
+</style>
+
+<script>
+
+function redirectostore() {
+    var countryselect = document.getElementById('countrycode');
+    var selectedValue = countryselect.options[countryselect.selectedIndex].value;
+  
+    if (selectedValue == 'int') {
+    window.location.href = 'https://warp-online.com/pages/new-home-page';
+    }  else {
+    window.location.href = 'https://warp-pk.myshopify.com/';
+    }
+    return false;
+  }
+
+ var x, i, j, l, ll, selElmnt, a, b, c;
+  /* Look for any elements with the class "country-select": */
+  x = document.getElementsByClassName("country-select");
+  l = x.length;
+  for (i = 0; i < l; i++) {
+    selElmnt = x[i].getElementsByTagName("select")[0];
+    ll = selElmnt.length;
+    /* For each element, create a new DIV that will act as the selected item: */
+    a = document.createElement("DIV");
+    a.setAttribute("class", "select-selected");
+    a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+    x[i].appendChild(a);
+    /* For each element, create a new DIV that will contain the option list: */
+    b = document.createElement("DIV");
+    b.setAttribute("class", "select-items select-hide");
+    for (j = 1; j < ll; j++) {
+      /* For each option in the original select element,
+      create a new DIV that will act as an option item: */
+      c = document.createElement("DIV");
+      c.innerHTML = selElmnt.options[j].innerHTML;
+      c.addEventListener("click", function(e) {
+          /* When an item is clicked, update the original select box,
+          and the selected item: */
+          var y, i, k, s, h, sl, yl;
+          s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+          sl = s.length;
+          h = this.parentNode.previousSibling;
+          for (i = 0; i < sl; i++) {
+            if (s.options[i].innerHTML == this.innerHTML) {
+              s.selectedIndex = i;
+              h.innerHTML = this.innerHTML;
+              y = this.parentNode.getElementsByClassName("same-as-selected");
+              yl = y.length;
+              for (k = 0; k < yl; k++) {
+                y[k].removeAttribute("class");
+              }
+              this.setAttribute("class", "same-as-selected");
+              break;
+            }
+          }
+          h.click();
+      });
+      b.appendChild(c);
+    }
+    x[i].appendChild(b);
+    a.addEventListener("click", function(e) {
+      /* When the select box is clicked, close any other select boxes,
+      and open/close the current select box: */
+      e.stopPropagation();
+      closeAllSelect(this);
+      this.nextSibling.classList.toggle("select-hide");
+      this.classList.toggle("select-arrow-active");
+    });
+  }
+  
+  function closeAllSelect(elmnt) {
+    /* A function that will close all select boxes in the document,
+    except the current select box: */
+    var x, y, i, xl, yl, arrNo = [];
+    x = document.getElementsByClassName("select-items");
+    y = document.getElementsByClassName("select-selected");
+    xl = x.length;
+    yl = y.length;
+    for (i = 0; i < yl; i++) {
+      if (elmnt == y[i]) {
+        arrNo.push(i)
+      } else {
+        y[i].classList.remove("select-arrow-active");
+      }
+    }
+    for (i = 0; i < xl; i++) {
+      if (arrNo.indexOf(i)) {
+        x[i].classList.add("select-hide");
+      }
+    }
+  }
+  document.addEventListener("click", closeAllSelect);
+  
+</script>
+
+
+<script>
+  // Desktop
+  var tag = document.createElement('script');
+
+  tag.src = "https://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+
+  let player;
+  const mediaQuery = window.matchMedia('(max-width: 768px)')
+  function onYouTubeIframeAPIReady(id) {
+
+
+    {% comment %} Mobile {% endcomment %}
+      if (mediaQuery.matches) {
+          player = new YT.Player('player', {
+              height: '100vh',
+              width: '100%',
+              videoId: '{{ section.settings.mobile_youtube_video_url.id }}',
+              playerVars: {
+                  'playsinline': 1,
+                  'autoplay': 1,
+                  'mute': 1,
+                  'loop':1,
+                  'rel':0,
+                  'controls':0,
+                  'modestbranding':1,
+                  'enablejsapi':1,
+                  'playlist':'{{ section.settings.mobile_youtube_video_url.id }}'
+              },
+              events: {
+                  'onReady': onPlayerReady,
+                  'onStateChange': onPlayerStateChange
+              }
+          });
+      } else {
+        {% comment %} Desktop {% endcomment %}
+          player = new YT.Player('player', {
+            height: '100vh',
+            width: '100%',
+              videoId: '{{ section.settings.desktop_youtube_video_url.id }}',
+              playerVars: {
+                'playsinline': 1,
+                'autoplay': 1,
+                'mute': 1,
+                'loop':1,
+                'rel':0,
+                'controls':0,
+                'modestbranding':1,
+                'enablejsapi':1,
+                'playlist':'{{ section.settings.desktop_youtube_video_url.id }}'
+              },
+              events: {
+                  'onReady': onPlayerReady,
+                  'onStateChange': onPlayerStateChange
+              }
+          });
+      }
+
+  }
+
+  function onPlayerReady(event) {
+      event.target.playVideo();
+  }
+
+  var done = false;
+  function onPlayerStateChange(event) {
+      if (event.data == YT.PlayerState.PLAYING && !done) {
+          done = true;
+      }
+  }
+</script>
+
+
+{% schema %}
+  {
+    "name": "home landing page",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "bg_image",
+        "label": "Desktop Background Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "bg_image_mob",
+        "label": "Mobile Background Image"
+      },
+       {
+      "type": "header",
+      "content": "Video Here"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_video",
+      "label": "Use Video",
+      "default": false
+    },
+    {
+      "type": "radio",
+      "id": "video_type",
+      "label": "Select Video Type",
+      "options": [
+        {
+          "value": "shopify_video",
+          "label": "Shopify Video"
+        },
+        {
+          "value": "youtube_video",
+          "label": "Youtube Video"
+        }
+      ],
+      "default": "youtube_video"
+    },
+    {
+      "type": "video_url",
+      "id": "desktop_youtube_video_url",
+      "label": "Desktop Youtube Video Here",
+      "accept": ["youtube", "vimeo"]
+    },
+    {
+      "type": "video_url",
+      "id": "mobile_youtube_video_url",
+      "label": "Mobile Youtube Video Here",
+      "accept": ["youtube", "vimeo"]
+    },
+    {
+      "type": "text",
+      "id": "desktop_shopify_video_url",
+      "label": "Desktop Shopify Video Here"
+    },
+    {
+      "type": "text",
+      "id": "mobile_shopify_video_url",
+      "label": "Mobile Shopify Video Here"
+    }
+    ],
+      "presets": [
+    {
+      "name": "home landing page",
+      "category": "Landing Page"
+    }
+  ]
+  }
+{% endschema %}
