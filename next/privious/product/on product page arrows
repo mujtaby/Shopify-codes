@@ -1,0 +1,50 @@
+  <div class="arrows-product">
+              {% assign current = product.id %}
+              {% if collection and collection.all_products_count >1 %}
+              {% for product in collection.products %}
+              {% assign id = product.id %}
+              {% if id == current %}
+              {% if forloop.last %}
+              {% assign next = 0 %}
+              {% else %}
+              {% assign next = forloop.index %}
+              {% endif %}
+              {% assign prev = forloop.index |minus:2 %}
+              {% endif %}
+              {% endfor %}
+              <div class="prev_prod"  >
+                <a href="{{collection.products[prev].url}}"><i class="fa fa-angle-left" aria-hidden="true"></i>{{'products.product.prev' |t}}</a>
+                <div class="position-absolute img-prev">
+                  <a href="{{collection.products[prev].url}}">
+                    <img data-src="{{collection.products[prev].featured_image.src | img_url:"80x80"}}" class="lazyload">
+                  </a>
+                  <div class="info-prod">
+                    <a href="{{collection.products[prev].url}}">{{collection.products[prev].title}}</a>
+                    <p >{{collection.products[prev].price|money}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="next_prod" >
+                <a href="{{collection.products[next].url}}">
+                  {{'products.product.next' |t}}<i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+                <div class=" img-next">
+                  <a href="{{collection.products[next].url}}">
+                    <img data-src="{{collection.products[next].featured_image.src | img_url:"80x80"}}" class="lazyload">
+                  </a>
+                  <div class="info-prod">
+                    <a href="{{collection.products[next].url}}" >{{collection.products[next].title}}</a>
+                    <p >{{collection.products[next].price|money}}</p>
+                  </div>
+                </div>
+              </div>
+              {% else %}
+              <a href="#"><i class="prev flaticon-left-arrow position-relative"></i></a>
+              <a href="#"><i class="next flaticon-right-arrow position-relative"></i></a>
+              {% endif %}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
