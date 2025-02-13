@@ -1,0 +1,32 @@
+{% comment %}
+{% assign displayed_options = '' | split: ',' %}
+
+{% for option in product.options_with_values %}
+  {% for value in option.values %}
+    {% unless displayed_options contains value %}
+      {% assign displayed_options = displayed_options | push: value %}
+                  {% endcomment %}
+      
+      {% assign variant = product.variants | where: 'option1', value | first %}
+      
+      <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="m-product-option--node__label">
+        <div class="mjt-var">{{ value }}</div>
+
+        {% if variant.metafields.custom.variants_image %}
+          <img class="mjt-variants" src="{{ variant.metafields.custom.variants_image | img_url: 'medium' }}" alt="{{ variant.title }}">
+        {% else %}
+          <img class="mjt-variants" src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
+        {% endif %}
+
+        {% if variant.price %}
+          <p class="var-price">{{ variant.price | money }}</p>
+        {% else %}
+          <p>Price not available</p>
+        {% endif %}
+
+        {%- if variant.compare_at_price > variant.price -%}
+          <p class="price--compare">{{ variant.compare_at_price | money }}</p>
+        {%- endif -%}
+      </label>
+
+    {% comment %} {% endunless %} {% endcomment %}
