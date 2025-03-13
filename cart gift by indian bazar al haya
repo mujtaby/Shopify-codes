@@ -1,0 +1,134 @@
+paste code in cart drawer liquid
+{% assign free_gift_threshold = settings.product.price %}
+                    {% assign converted_amount = free_gift_threshold %}
+                    {% assign cart_total = cart.total_price %}
+                    {% assign amount_left = converted_amount | minus: cart_total %}
+                    {% assign free_gift_added = false %}
+
+          
+                    
+                    <!-- Check if a free gift is already in the cart -->
+                    {% for item in cart.items %}
+                      {% if item.properties._free_gift %}
+                        {% assign free_gift_added = true %}
+                      {% endif %}
+                    {% endfor %}
+                    
+                      <!-- Show progress message -->
+                     {% comment %} {% if cart_total < free_gift_threshold and free_gift_added == false %}
+                        <p class="free-gift-message">🛍️ You are {{ amount_left | money }}  away from a free gift!</p>
+                      {% endif %} 
+          {% endcomment %}
+        {% if cart_total < free_gift_threshold and free_gift_added == false %}
+                        <p class="free-gift-message">🛍️ You are {{ amount_left | money_with_currency }} away from a free gift!</p>
+                      {% endif %}
+
+
+
+          
+
+          
+          {% render 'cart-items' %}
+
+
+
+<!-- ======================free gift cart code ==================== -->
+                    {% if cart_total >= free_gift_threshold and free_gift_added == false %}
+                      <div id="free-gift-section">
+                        <h3>Select Your Free Gift {{ section.id }}</h3>
+                        <div id="free-gift-products">
+                          {% assign free_gifts = settings.free_gift_1 | append: ',' | append: settings.free_gift_2 | append: ',' | append: settings.free_gift_3 | append: ',' | append: settings.free_gift_4 | split: ',' %}
+                    
+                          {% for product in settings.free_gift_1.products %}
+                            {% comment %}{% assign product = all_products[product_id] %} {% endcomment %}
+                            {% if product.title != blank %}
+                              <div class="free-gift">
+                                <img src="{{ product.featured_media | img_url: 'medium' }}" alt="{{ product.title }}" />
+                                <h2>{{ product.title }}</h2>
+                                {% comment %} <p>{{ product.price | money }}</p> {% endcomment %}
+                                <span class="add-free-gift" data-variant-id="{{ product.variants.first.id }}">
+                                  Add to Cart
+                                </span>
+                              </div>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    {% endif %}
+
+
+
+js cart 
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.body.addEventListener("click", function (event) {
+        if (event.target.classList.contains("add-free-gift")) {
+            let variantId = event.target.getAttribute("data-variant-id");
+
+            fetch('/cart/add.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: variantId,
+                    quantity: 1,
+                    properties: { "_free_gift": true }
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                setTimeout(() => { updateCartDrawer(); }, 500);
+            })
+            .catch(error => {
+                console.error("Error adding free gift:", error);
+            });
+        }
+    });
+});
+
+function updateCartDrawer() {
+    fetch('/?section_id=cart-drawer') // Ensure correct URL
+        .then(response => {
+            console.log('Response:', response); // Log the response object
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`); // Corrected template literal
+            }
+            return response.text();
+        })
+        .then(html => {
+            console.log('HTML Response:', html); // Log the full HTML response
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            const newCartDrawer = doc.getElementById('sidebar-cart'); // Updated selector
+            const existingCartDrawer = document.getElementById('sidebar-cart');
+
+            if (newCartDrawer && existingCartDrawer) {
+                existingCartDrawer.innerHTML = newCartDrawer.innerHTML;
+            } else {
+                console.error('Cart drawer element not found in the response or DOM.');
+            }
+        })
+        .catch(error => {
+            console.error('Error updating cart drawer:', error);
+        });
+}
+
+
+
+</script>
+
+setting json
+ {
+  "name": "Free Gift Settings",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "free_gift_1",
+      "label": "Free Gift Collection"
+    },
+    
+    {
+    "type": "product",
+    "id": "product",
+    "label": "Product"
+    },
