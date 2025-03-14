@@ -59,6 +59,7 @@ paste code in cart drawer liquid
 
 
 js cart 
+  
   <script>
   document.addEventListener("DOMContentLoaded", function () {
     document.body.addEventListener("click", function (event) {
@@ -84,6 +85,8 @@ js cart
         }
     });
 });
+
+    
 
 function updateCartDrawer() {
     fetch('/?section_id=cart-drawer') // Ensure correct URL
@@ -115,7 +118,106 @@ function updateCartDrawer() {
 
 
 
-</script>
+
+    async function checkAndRemoveFreeGift() {
+    try {
+        const response = await fetch('/cart.js');
+        const cart = await response.json();
+
+        const storeCurrency = cart.currency; 
+        // console.log(Store Currency: ${storeCurrency});
+        let cartTotalWithoutGifts = 0;
+        let freeGiftTotal = 0;
+        
+        cart.items.forEach(item => {
+            if (item.properties && item.properties._free_gift) {
+                freeGiftTotal += item.final_line_price;
+            } else {
+                cartTotalWithoutGifts += item.final_line_price;
+            }
+        });
+
+        // console.log(Cart Total Without Free Gifts: ${cartTotalWithoutGifts / 100} ${storeCurrency});
+        // console.log(Free Gift Total: ${freeGiftTotal / 100} ${storeCurrency});
+        const convertedThreshold = await convertCurrency(100, 'USD', storeCurrency);
+        // console.log(Converted Threshold: ${convertedThreshold} ${storeCurrency});
+
+        if ((cartTotalWithoutGifts / 100) < convertedThreshold) {
+            cart.items.forEach(item => {
+                if (item.properties && item.properties._free_gift) {
+                    removeItemFromCart(item.key);
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching cart:', error);
+    }
+}
+
+async function convertCurrency(amount, fromCurrency, toCurrency) {
+    if (fromCurrency === toCurrency) return amount; 
+
+    try {
+      const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${fromCurrency}`);
+
+        const data = await response.json();
+        const exchangeRate = data.rates[toCurrency] || 1;
+        return amount * exchangeRate;
+    } catch (error) {
+        console.error('Error fetching exchange rate:', error);
+        return amount;
+    }
+}
+async function removeItemFromCart(itemKey) {
+    try {
+        const response = await fetch('/cart/change.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: itemKey, quantity: 0 })
+        });
+        const updatedCart = await response.json();
+        console.log('Updated Cart:', updatedCart);
+      setTimeout(() => { updateCartDrawer(); }, 500);
+    } catch (error) {
+        console.error('Error removing item:', error);
+    }
+}
+
+function observeDrawerCart() {
+    const drawerCart = document.querySelector('#sidebar-cart');
+    if (!drawerCart) {
+        console.warn('Drawer cart not found.');
+        return;
+    }
+
+    const observer = new MutationObserver(() => {
+        console.log('Cart drawer updated, checking free gift...');
+        checkAndRemoveFreeGift();
+    });
+
+    observer.observe(drawerCart, { childList: true, subtree: true });
+}
+(function () {
+    const originalFetch = window.fetch;
+    window.fetch = async function (...args) {
+        const response = await originalFetch(...args);
+        
+        if (args[0].includes('/cart') || args[0].includes('/cart/add.js') || args[0].includes('/cart/update.js')) {
+            console.log('Cart request detected, checking free gift...');
+            checkAndRemoveFreeGift();
+        }
+        
+        return response;
+    };
+})();
+
+document.addEventListener('DOMContentLoaded', () => {
+    checkAndRemoveFreeGift();
+    observeDrawerCart();
+});
+
+</script> 
+
 
 setting json
  {
