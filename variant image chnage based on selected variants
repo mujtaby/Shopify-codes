@@ -1,0 +1,91 @@
+{% capture id %}{% if variant_selection_id != blank %}{{ variant_selection_id }}-{% endif %}{{ section.id }}-data-variant-option-{{ option_index }}{% endcapture %}
+{% assign selected_variant = product.selected_or_first_available_variant %}
+
+<div class="options-selection__select-wrapper for-{{ option.name | Handle }}">
+  <span class="featured_image_variants">
+    <img 
+      id="variant-main-image"
+      src="{{ selected_variant.image.src | img_url: 'large' }}" 
+      alt="{{ selected_variant.title }}"
+    />
+  </span>
+
+  <div class="options-selection__select">
+    <label
+      class="options-selection__select-label"
+      for="{{ id }}-{{ section.id }}"
+      data-variant-option-name="{{ option.name }}"
+      data-variant-option-choose-name="{{ 'product.variants.choose_option' | t: option: option.name }}"
+    >
+      {{ option.name }}
+    </label>
+
+    <div class="options-selection__input-select-wrapper">
+      <select
+        id="{{ id }}-{{ section.id }}"
+        class="options-selection__input-select variant-selector"
+        data-variant-option
+        data-variant-option-index="{{ option_index }}"
+        data-variant-option-chosen-value="{% if selected_variant %}{{ option.selected_value }}{% else %}false{% endif %}"
+      >
+        {% unless selected_variant %}
+          <option
+            value="not-selected"
+            disabled
+            selected
+            data-variant-option-value-wrapper
+            data-variant-option-value
+            data-variant-option-value-index="{{ option_index }}"
+          >
+            {{ 'product.variants.choose_option' | t: option: option.name }}
+          </option>
+        {% endunless %}
+
+        {% for value in option.values %}
+          {% assign variant_image = "" %}
+          {% for variant in product.variants %}
+            {% if variant.title contains value and variant.image %}
+              {% assign variant_image = variant.image.src | img_url: 'large' %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+          
+          <option
+            value="{{ value | escape }}"
+            {% if selected_variant and option.selected_value == value %}selected{% endif %}
+            data-image="{{ variant_image }}"
+          >
+            {{ value }}
+          </option>
+        {% endfor %}
+      </select>
+
+      <div class="options-selection__input-select-chevron">
+        <svg aria-hidden="true" focusable="false" role="presentation" width="8" height="6" viewBox="0 0 8 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 4.5L7 1.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="square"/>
+          <path d="M4 4.5L1 1.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="square"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+            <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const selects = document.querySelectorAll('.variant-selector');
+
+    selects.forEach(select => {
+      select.addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const image = selectedOption.getAttribute('data-image');
+
+        if (image) {
+          const imgElement = document.getElementById('variant-main-image');
+          if (imgElement) {
+            imgElement.src = image;
+          }
+        }
+      });
+    });
+  });
+</script>
